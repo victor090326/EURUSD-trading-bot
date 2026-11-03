@@ -281,7 +281,7 @@ Do not present this as financial advice.
 """
                 with st.spinner("Reviewing chart screenshot..."):
                     result = client.models.generate_content(
-                        model="gemini-2.5-flash",
+                        model="gemini-3.8-flash",
                         contents=[prompt, image]
                     )
                 st.markdown("### Screenshot analysis")
