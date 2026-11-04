@@ -280,9 +280,8 @@ Describe only what is visibly supported by the image:
 Do not invent prices, indicator values, or unseen data. Do not claim certainty.
 Do not present this as financial advice.
 """
-                with st.spinner("Reviewing chart..."):
+with st.spinner("Analyzing chart...")
     result = None
-
     for attempt in range(3):
         try:
             result = client.models.generate_content(
