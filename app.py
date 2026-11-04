@@ -1,3 +1,4 @@
+import time
 import io
 import re
 from typing import Optional
@@ -279,11 +280,24 @@ Describe only what is visibly supported by the image:
 Do not invent prices, indicator values, or unseen data. Do not claim certainty.
 Do not present this as financial advice.
 """
-                with st.spinner("Reviewing chart screenshot..."):
-                    result = client.models.generate_content(
-                        model="gemini-3.8-flash",
-                        contents=[prompt, image]
-                    )
+                with st.spinner("Reviewing chart..."):
+    result = None
+
+    for attempt in range(3):
+        try:
+            result = client.models.generate_content(
+                model="gemini-3.8-flash",
+                contents=[prompt, image]
+            )
+            break
+
+        except Exception as e:
+            error_text = str(e).lower()
+
+            if ("503" in error_text or "unavailable" in error_text or "overloaded" in error_text) and attempt < 2:
+                time.sleep(2 ** (attempt + 1))
+            else:
+                raise
                 st.markdown("### Screenshot analysis")
                 st.write(result.text or "The model returned no text.")
             except Exception as exc:
